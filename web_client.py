@@ -11,7 +11,7 @@ from flask import Flask, render_template
 from wtforms.validators import Required
 
 app = Flask(__name__)
-proj_dir = sys.path[0]
+proj_dir = sys.path[0].replace('/', '\\')
 file_list = os.listdir('.')
 t = {}
 
@@ -225,8 +225,8 @@ def parse_csv(file_path, is_company, company_name):
 		filename = file_path.split('/')[-1].encode('utf8')
 	else:
 		filename = file_path.split('\\')[-1]
-	logger('加载' + filename + '数据')
-	csvfile = file(file_path, 'rb')
+	logger(u'加载' + filename + u'数据')
+	csvfile = file(file_path, 'r+')
 	reader = csv.reader(csvfile)
 
 	all_dict = {}
@@ -268,12 +268,13 @@ def parse_csv(file_path, is_company, company_name):
 				count += 1
 			else:
 				all_dict.setdefault(order, {'province': province, 'price': price, 'weight': weight, 'cpname': cpname})
-	csvfile = file('%s/result/%s 重复运单号(%s).csv' % (proj_dir, filename, count), 'wb')
+	s = u'%s\\result\%s 重复运单号(%s).csv' % (proj_dir, filename, count)
+	csvfile = file(s, 'w+')
 	writer = csv.writer(csvfile)
 	writer.writerow(['运单号'])
 	writer.writerows([[o] for o in orders])
 	csvfile.close()
-	print '%s 数据已经加载完毕,重复数：%s' % (filename, count)
+	print u'%s 数据已经加载完毕,重复数：%s' % (filename, count)
 	return all_dict
 
 
@@ -351,11 +352,11 @@ def compute(company_name, waibu_file, company_file):
 	logger('计算%s数据' % company_name)
 	waibu_dict = parse_csv(waibu_file, is_company=False, company_name=company_name)
 	transform_file_decode(company_file)
-	company_dict = parse_csv(u'%s/tmp/系统混合.csv' % proj_dir, is_company=True, company_name=company_name)
+	company_dict = parse_csv(u'%s\\tmp\\系统混合.csv' % proj_dir, is_company=True, company_name=company_name)
 	data = []
 	data_1 = []
 
-	workbook = xlsxwriter.Workbook('%s/result/比对结果(%s).xlsx' % (proj_dir, company_name))
+	workbook = xlsxwriter.Workbook(u'%s\\result\\比对结果(%s).xlsx' % (proj_dir, company_name.decode('utf8')))
 	worksheet = workbook.add_worksheet()
 
 	format_1 = workbook.add_format({'bold': True, 'font_color': 'red', 'align': 'right'})
@@ -440,12 +441,12 @@ def compute(company_name, waibu_file, company_file):
 
 	logger('检查不互有的运单')
 	print '外部有而公司没有的运单数: %s' % len(extra_wai)
-	csvfile = file('%s/result/外部有而公司没有的运单号(%s-%s).csv' % (proj_dir, company_name, len(extra_wai)), 'wb')
+	csvfile = file(u'%s\\result\\外部有而公司没有的运单号(%s-%s).csv' % (proj_dir, company_name.decode('utf8'), len(extra_wai)), 'wb')
 	writer = csv.writer(csvfile)
 	writer.writerow(['运单号'])
 	writer.writerows([[o] for o in extra_wai])
 	print '公司有而外部没有的运单数: %s' % len(extra_nei)
-	csvfile = file('%s/result/公司有而外部没有的运单号(%s-%s).csv' % (proj_dir, company_name, len(extra_nei)), 'wb')
+	csvfile = file(u'%s\\result\\公司有而外部没有的运单号(%s-%s).csv' % (proj_dir, company_name.decode('utf8'), len(extra_nei)), 'wb')
 	writer = csv.writer(csvfile)
 	writer.writerow(['运单号'])
 	writer.writerows([[o] for o in extra_nei])
@@ -456,7 +457,7 @@ def compute(company_name, waibu_file, company_file):
 def transform_file_decode(filename):
 	try:
 		fin = open(filename, 'r')
-		fout = open('%s/tmp/系统混合.csv' % proj_dir, 'w')
+		fout = open(u'%s\\tmp\\系统混合.csv' % proj_dir, 'w')
 		out_str = ''
 		lines = fin.readlines()
 		row_num = len(lines)
@@ -496,7 +497,9 @@ def get_width(o):
 
 def logger(info):
 	str_len = 0
-	for i in info.decode('utf8'):
+	if type(info) != unicode:
+		info = info.decode('utf8')
+	for i in info:
 		str_len += get_width(ord(i))
 	left_len = 20
 	print '%s%s%s' % (('-' * left_len), info, ('-' * (60 - left_len - str_len)))
