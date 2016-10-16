@@ -107,8 +107,9 @@ def change_price_info():
 			data[key] = {}
 		data[key][p] = {'weight_line': weight_line, 'extra_price': extra_price}
 	json.dump(data, open('%s/res/%s_price_split.json' % (proj_dir, company_pinyin), 'w+'))
-
-	return json.dumps({'status': 0, 'msg': u'%s[%s]的计价规则已更新' % (companies[int(request.form['company'])].keys()[0], u' '.join(province))})
+	msg = u'%s[%s]的计价规则已更新' % (companies[int(request.form['company'])].keys()[0], u' '.join(province))
+	print msg
+	return render_template('check_succ.html', msg=msg)
 
 
 @app.route('/check/', methods=['POST', 'GET'])
@@ -124,28 +125,35 @@ def check():
 	count_str = u''
 	if company_path:
 		if not os.path.exists(company_path):
-			return json.dumps({'status': -2, 'msg': u'外部中通文件不存在:%s' % company_path})
+			msg = u'内部混合文件不存在:%s' % company_path
+			return render_template('error.html', msg=msg)
+	else:
+		msg = u'\'内部混合\'一栏不能为空！'
+		return render_template('error.html', msg=msg)
 	if zhongtong_path:
 		if not os.path.exists(zhongtong_path):
-			return json.dumps({'status': -2, 'msg': u'外部中通文件不存在:%s' % zhongtong_path})
+			msg = u'外部中通文件不存在:%s' % company_path
+			return render_template('error.html', msg=msg)
 		compute('中通', zhongtong_path, company_path)
 		count += 1
 		count_str += u'中通'
 	if shentong_path:
 		if not os.path.exists(shentong_path):
-			return json.dumps({'status': -2, 'msg': u'外部申通文件不存在:%s' % shentong_path})
+			msg = u'外部申通文件不存在:%s' % company_path
+			return render_template('error.html', msg=msg)
 		compute('申通', shentong_path, company_path)
 		count += 1
 		count_str += u'申通'
 	if youzheng_path:
 		if not os.path.exists(youzheng_path):
-			return json.dumps({'status': -2, 'msg': u'外部邮政文件不存在:%s' % youzheng_path})
+			msg = u'外部邮政文件不存在:%s' % company_path
+			return render_template('error.html', msg=msg)
 		compute('邮政', youzheng_path, company_path)
 		count += 1
 		count_str += u'邮政'
-
-	return json.dumps(
-		{'status': 0, 'msg': u'核对完成! 共核对了%s%s家公司的快递账单,请到%s\\result\\目录下查看核对结果!' % (count_str, count, proj_dir)})
+	msg = u'核对完成! 共核对了%s%s家公司的快递账单,请到%s\\result\\目录下查看核对结果!' % (count_str, count, proj_dir)
+	print msg
+	return render_template('check_succ.html', msg=msg)
 
 
 @app.route('/test/')
