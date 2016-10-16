@@ -145,7 +145,7 @@ def check():
 		count_str += u'邮政'
 
 	return json.dumps(
-		{'status': 0, 'msg': u'核对完成! 共核对了%s%s家公司的快递账单,请到%s/result/目录下查看核对结果!' % (count_str, count, proj_dir)})
+		{'status': 0, 'msg': u'核对完成! 共核对了%s%s家公司的快递账单,请到%s\\result\\目录下查看核对结果!' % (count_str, count, proj_dir)})
 
 
 @app.route('/test/')
