@@ -13,7 +13,8 @@
 <body>
 <ul class="nav nav-tabs">
   <li class="active"><a href="#home" data-toggle="tab">账单核对</a></li>
-  <li><a href="#profile" data-toggle="tab">计价</a></li>
+  <li><a href="#profile" data-toggle="tab">计价方式</a></li>
+  <li><a href="#edit" data-toggle="tab">编辑计价</a></li>
 </ul>
 <div id="myTabContent" class="tab-content">
   <div class="tab-pane fade active in" id="home">
@@ -133,27 +134,13 @@
                 </tbody>
             </table>
         </div>
-        <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="margin-top: 20px">编辑快递计价</button>
+{#        <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="margin-top: 20px">编辑快递计价</button>#}
 
     </div>
   </div>
-</div>
-
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-   <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-           <button type="button" class="close"
-              data-dismiss="modal" aria-hidden="true">
-                 &times;
-           </button>
-           <h4 class="modal-title" id="myModalLabel">
-              添加计价规则
-           </h4>
-        </div>
-        <div class="modal-body">
-        <form class="form-horizontal" action="/change_price_info/" method="post">
+  <div class="tab-pane fade" id="edit">
+      <div class="well" style="margin-left: 30px; margin-top: 30px; margin-right: 30px" align="center">
+          <form class="form-horizontal" action="/change_price_info/" method="post">
           <fieldset>
             <div class="form-group">
               <label class="col-lg-2 control-label">快递公司</label>
@@ -208,7 +195,7 @@
             <div class="form-group">
               <label for="textArea" class="col-lg-2 control-label">生效省份</label>
               <div class="col-lg-10">
-                  {{ price_change_form.province(class="form-control", rows="3", id="textArea", placeholder="[当前计价的适用省份，用加号分隔，中间没有空格]&#10例: 北京+天津+上海") }}
+                  {{ price_change_form.province(class="form-control", rows="3", id="textArea", placeholder="[当前计价的适用省份，用加号分隔，中间没有空格]\r\n例: 北京+天津+上海") }}
               </div>
             </div>
             <div class="form-group">
@@ -219,15 +206,99 @@
             </div>
           </fieldset>
         </form>
-         </div>
-         <div class="modal-footer">
-            <button type="button" class="btn btn-default"
-               data-dismiss="modal">关闭
-            </button>
-         </div>
-      </div>
+          </div>
+  </div>
 </div>
-</div>
+
+{##}
+{#<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">#}
+{#   <div class="modal-dialog">#}
+{#      <div class="modal-content">#}
+{#        <div class="modal-header">#}
+{#           <button type="button" class="close"#}
+{#              data-dismiss="modal" aria-hidden="true">#}
+{#                 &times;#}
+{#           </button>#}
+{#           <h4 class="modal-title" id="myModalLabel">#}
+{#              添加计价规则#}
+{#           </h4>#}
+{#        </div>#}
+{#        <div class="modal-body">#}
+{#        <form class="form-horizontal" action="/change_price_info/" method="post">#}
+{#          <fieldset>#}
+{#            <div class="form-group">#}
+{#              <label class="col-lg-2 control-label">快递公司</label>#}
+{#              <div class="col-lg-10">#}
+{#                <div class="radio" style="width: 30%;">#}
+{#                      {{ price_change_form.company }}#}
+{#                </div>#}
+{#              </div>#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                <label for="inputEmail" class="col-lg-2 control-label">首重1</label>#}
+{#                <div class="col-lg-10">#}
+{#                    {{ price_change_form.weight_line1(class="form-control", id="inputDefault", style="width: 60%; float: left;", placeholder="[重量区间(KG)] 例: 1<x≤2 下同") }}#}
+{#                    {{ price_change_form.price_line1(class="form-control", id="inputDefault", style="width: 35%; float: right;", placeholder="价格(元)") }}#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                <label for="inputEmail" class="col-lg-2 control-label">首重2</label>#}
+{#                <div class="col-lg-10">#}
+{#                    {{ price_change_form.weight_line2(class="form-control", id="inputDefault", style="width: 60%; float: left;") }}#}
+{#                    {{ price_change_form.price_line2(class="form-control", id="inputDefault", style="width: 35%; float: right;") }}#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                <label for="inputEmail" class="col-lg-2 control-label">首重3</label>#}
+{#                <div class="col-lg-10">#}
+{#                    {{ price_change_form.weight_line3(class="form-control", id="inputDefault", style="width: 60%; float: left;") }}#}
+{#                    {{ price_change_form.price_line3(class="form-control", id="inputDefault", style="width: 35%; float: right;") }}#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                <label for="inputEmail" class="col-lg-2 control-label">首重4</label>#}
+{#                <div class="col-lg-10">#}
+{#                    {{ price_change_form.weight_line4(class="form-control", id="inputDefault", style="width: 60%; float: left;") }}#}
+{#                    {{ price_change_form.price_line4(class="form-control", id="inputDefault", style="width: 35%; float: right;") }}#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                <label for="inputEmail" class="col-lg-2 control-label">首重5</label>#}
+{#                <div class="col-lg-10">#}
+{#                    {{ price_change_form.weight_line5(class="form-control", id="inputDefault", style="width: 60%; float: left;") }}#}
+{#                    {{ price_change_form.price_line5(class="form-control", id="inputDefault", style="width: 35%; float: right;") }}#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                <label for="inputEmail" class="col-lg-2 control-label">续重</label>#}
+{#                <div class="col-lg-10">#}
+{#                    {{ price_change_form.unit(class="form-control", id="inputDefault", style="width: 60%; float: left;", placeholder="[计量单位] 0代表kg,1代表100g") }}#}
+{#                    {{ price_change_form.extra_price(class="form-control", id="inputDefault", style="width: 35%; float: right;", placeholder="价格(元)") }}#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#              <label for="textArea" class="col-lg-2 control-label">生效省份</label>#}
+{#              <div class="col-lg-10">#}
+{#                  {{ price_change_form.province(class="form-control", rows="3", id="textArea", placeholder="[当前计价的适用省份，用加号分隔，中间没有空格]&#10例: 北京+天津+上海") }}#}
+{#              </div>#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#              <div class="col-lg-10 col-lg-offset-2">#}
+{#                <button type="reset" class="btn btn-default">重置</button>#}
+{#                <button type="submit" class="btn btn-primary">提交更改</button>#}
+{#              </div>#}
+{#            </div>#}
+{#          </fieldset>#}
+{#        </form>#}
+{#         </div>#}
+{#         <div class="modal-footer">#}
+{#            <button type="button" class="btn btn-default"#}
+{#               data-dismiss="modal">关闭#}
+{#            </button>#}
+{#         </div>#}
+{#      </div>#}
+{#</div>#}
+{#</div>#}
 </body>
 
 </html>
