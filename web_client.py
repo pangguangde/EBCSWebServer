@@ -440,12 +440,12 @@ def compute(company_name, waibu_file, company_file):
 	extra_nei = company_set - waibu_set
 
 	logger('检查不互有的运单')
-	print '外部有而公司没有的运单数: %s' % len(extra_wai)
+	print u'外部有而公司没有的运单数: %s' % len(extra_wai)
 	csvfile = file(u'%s\\result\\外部有而公司没有的运单号(%s-%s).csv' % (proj_dir, company_name.decode('utf8'), len(extra_wai)), 'wb')
 	writer = csv.writer(csvfile)
 	writer.writerow(['运单号'])
 	writer.writerows([[o] for o in extra_wai])
-	print '公司有而外部没有的运单数: %s' % len(extra_nei)
+	print u'公司有而外部没有的运单数: %s' % len(extra_nei)
 	csvfile = file(u'%s\\result\\公司有而外部没有的运单号(%s-%s).csv' % (proj_dir, company_name.decode('utf8'), len(extra_nei)), 'wb')
 	writer = csv.writer(csvfile)
 	writer.writerow(['运单号'])
