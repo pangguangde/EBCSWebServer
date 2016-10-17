@@ -2,6 +2,7 @@
 import csv
 import json
 import os, sys
+import platform
 import traceback
 from flask import request
 from wtforms import *
@@ -11,7 +12,16 @@ from flask import Flask, render_template
 from wtforms.validators import Required
 
 app = Flask(__name__)
-proj_dir = sys.path[0].replace('/', '\\')
+cur_platform = platform.system()
+proj_dir = sys.path[0]
+res_dir = '%s/res/' % proj_dir
+result_dir = '%s/result/' % proj_dir
+tmp_dir = '%s/tmp/' % proj_dir
+if cur_platform == 'Windows':
+	proj_dir = proj_dir.replace('/', '\\')
+	res_dir = res_dir.replace('/', '\\')
+	result_dir = result_dir.replace('/', '\\')
+	tmp_dir = tmp_dir.replace('/', '\\')
 file_list = os.listdir('.')
 t = {}
 
@@ -151,7 +161,7 @@ def check():
 		compute('邮政', youzheng_path, company_path)
 		count += 1
 		count_str += u'邮政'
-	msg = u'核对完成! 共核对了%s%s家公司的快递账单,请到%s\\result\\目录下查看核对结果!' % (count_str, count, proj_dir)
+	msg = u'核对完成! 共核对了%s%s家公司的快递账单,请到%s目录下查看核对结果!' % (count_str, count, result_dir)
 	print msg
 	return render_template('check_succ.html', msg=msg)
 
@@ -230,7 +240,7 @@ def get_old_split_data(company_name):
 
 def parse_csv(file_path, is_company, company_name):
 	if file_path.find('/') >= 0:
-		filename = file_path.split('/')[-1].encode('utf8')
+		filename = file_path.split('/')[-1]
 	else:
 		filename = file_path.split('\\')[-1]
 	logger(u'加载' + filename + u'数据')
@@ -276,7 +286,7 @@ def parse_csv(file_path, is_company, company_name):
 				count += 1
 			else:
 				all_dict.setdefault(order, {'province': province, 'price': price, 'weight': weight, 'cpname': cpname})
-	s = u'%s\\result\%s 重复运单号(%s).csv' % (proj_dir, filename, count)
+	s = u'%s%s 重复运单号(%s).csv' % (result_dir, filename, count)
 	csvfile = file(s, 'w+')
 	writer = csv.writer(csvfile)
 	writer.writerow(['运单号'])
@@ -360,11 +370,11 @@ def compute(company_name, waibu_file, company_file):
 	logger('计算%s数据' % company_name)
 	waibu_dict = parse_csv(waibu_file, is_company=False, company_name=company_name)
 	transform_file_decode(company_file)
-	company_dict = parse_csv(u'%s\\tmp\\系统混合.csv' % proj_dir, is_company=True, company_name=company_name)
+	company_dict = parse_csv(u'%s系统混合.csv' % tmp_dir, is_company=True, company_name=company_name)
 	data = []
 	data_1 = []
 
-	workbook = xlsxwriter.Workbook(u'%s\\result\\比对结果(%s).xlsx' % (proj_dir, company_name.decode('utf8')))
+	workbook = xlsxwriter.Workbook(u'%s比对结果(%s).xlsx' % (result_dir, company_name.decode('utf8')))
 	worksheet = workbook.add_worksheet()
 
 	format_1 = workbook.add_format({'bold': True, 'font_color': 'red', 'align': 'right'})
@@ -449,12 +459,12 @@ def compute(company_name, waibu_file, company_file):
 
 	logger('检查不互有的运单')
 	print u'外部有而公司没有的运单数: %s' % len(extra_wai)
-	csvfile = file(u'%s\\result\\外部有而公司没有的运单号(%s-%s).csv' % (proj_dir, company_name.decode('utf8'), len(extra_wai)), 'wb')
+	csvfile = file(u'%s外部有而公司没有的运单号(%s-%s).csv' % (result_dir, company_name.decode('utf8'), len(extra_wai)), 'wb')
 	writer = csv.writer(csvfile)
 	writer.writerow(['运单号'])
 	writer.writerows([[o] for o in extra_wai])
 	print u'公司有而外部没有的运单数: %s' % len(extra_nei)
-	csvfile = file(u'%s\\result\\公司有而外部没有的运单号(%s-%s).csv' % (proj_dir, company_name.decode('utf8'), len(extra_nei)), 'wb')
+	csvfile = file(u'%s公司有而外部没有的运单号(%s-%s).csv' % (result_dir, company_name.decode('utf8'), len(extra_nei)), 'wb')
 	writer = csv.writer(csvfile)
 	writer.writerow(['运单号'])
 	writer.writerows([[o] for o in extra_nei])
@@ -465,7 +475,7 @@ def compute(company_name, waibu_file, company_file):
 def transform_file_decode(filename):
 	try:
 		fin = open(filename, 'r')
-		fout = open(u'%s\\tmp\\系统混合.csv' % proj_dir, 'w')
+		fout = open(u'%s系统混合.csv' % tmp_dir, 'w')
 		out_str = ''
 		lines = fin.readlines()
 		row_num = len(lines)
