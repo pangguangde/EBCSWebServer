@@ -7,21 +7,10 @@ __author__ = 'guangde'
 
 import csv
 import json
-import sys
-import platform
 import traceback
 
+from setting import *
 
-cur_platform = platform.system()
-proj_dir = sys.path[0]
-res_dir = '%s/res/' % proj_dir
-result_dir = '%s/result/' % proj_dir
-tmp_dir = '%s/tmp/' % proj_dir
-if cur_platform == 'Windows':
-	proj_dir = proj_dir.replace('/', '\\')
-	res_dir = res_dir.replace('/', '\\')
-	result_dir = result_dir.replace('/', '\\')
-	tmp_dir = tmp_dir.replace('/', '\\')
 
 
 class DataParserBase(object):
@@ -82,7 +71,7 @@ class DataParserBase(object):
 				count += 1
 			else:
 				all_dict.setdefault(order, {'province': province, 'price': price, 'weight': weight, 'cpname': cpname})
-		s = u'%s%s 重复运单号(%s).csv' % (result_dir, filename, count)
+		s = u'%s%s 重复运单号(%s).csv' % (RESULT_DIR, filename, count)
 		print u'%s 数据已经加载完毕,重复数：%s' % (filename, count)
 		csvfile = file(s, 'w+')
 		writer = csv.writer(csvfile)
@@ -128,7 +117,7 @@ class DataParserBase(object):
 				count += 1
 			else:
 				all_dict.setdefault(order, {'province': province, 'price': price, 'weight': weight, 'cpname': cpname})
-		s = u'%s%s 重复运单号(%s).csv' % (result_dir, filename, count)
+		s = u'%s%s 重复运单号(%s).csv' % (RESULT_DIR, filename, count)
 		print u'%s 数据已经加载完毕,重复数：%s' % (filename, count)
 		csvfile = file(s, 'w+')
 		writer = csv.writer(csvfile)
@@ -155,7 +144,7 @@ class DataParserBase(object):
 		return int(a) if (int(a) == a) else (int(a) + 1)
 
 	def get_old_split_data(self):
-		data = json.load(open('%s/res/%s_price_split.json' % (proj_dir, self.company_pinyin), 'r+'))
+		data = json.load(open('%s/res/%s_price_split.json' % (PROJECT_DIR, self.company_pinyin), 'r+'))
 		new_data = {}
 		for infos in data.values():
 			for k, v in infos.items():

@@ -1,24 +1,12 @@
 # coding=utf-8
 import csv
-import platform
 
-import sys
 import xlsxwriter
 
 from Logger.Logger import Logger
+from setting import *
 
 __author__ = 'guangde'
-
-cur_platform = platform.system()
-proj_dir = sys.path[0]
-res_dir = '%s/res/' % proj_dir
-result_dir = '%s/result/' % proj_dir
-tmp_dir = '%s/tmp/' % proj_dir
-if cur_platform == 'Windows':
-	proj_dir = proj_dir.replace('/', '\\')
-	res_dir = res_dir.replace('/', '\\')
-	result_dir = result_dir.replace('/', '\\')
-	tmp_dir = tmp_dir.replace('/', '\\')
 
 
 class Checker(object):
@@ -36,7 +24,7 @@ class Checker(object):
 		company_dict = self.company_obj.csv_data
 		waibu_dict = self.waibu_obj.csv_data
 
-		workbook = xlsxwriter.Workbook(u'%s比对结果(%s).xlsx' % (result_dir, company_name.decode('utf8')))
+		workbook = xlsxwriter.Workbook(u'%s比对结果(%s).xlsx' % (RESULT_DIR, company_name.decode('utf8')))
 		worksheet = workbook.add_worksheet()
 
 		format_1 = workbook.add_format({'bold': True, 'font_color': 'red', 'align': 'right'})
@@ -115,12 +103,12 @@ class Checker(object):
 
 		self.logger.info('检查不互有的运单')
 		print u'外部有而公司没有的运单数: %s' % len(extra_wai)
-		csvfile = file(u'%s外部有而公司没有的运单号(%s-%s).csv' % (result_dir, company_name.decode('utf8'), len(extra_wai)), 'wb')
+		csvfile = file(u'%s外部有而公司没有的运单号(%s-%s).csv' % (RESULT_DIR, company_name.decode('utf8'), len(extra_wai)), 'wb')
 		writer = csv.writer(csvfile)
 		writer.writerow(['运单号'])
 		writer.writerows([[o] for o in extra_wai])
 		print u'公司有而外部没有的运单数: %s' % len(extra_nei)
-		csvfile = file(u'%s公司有而外部没有的运单号(%s-%s).csv' % (result_dir, company_name.decode('utf8'), len(extra_nei)), 'wb')
+		csvfile = file(u'%s公司有而外部没有的运单号(%s-%s).csv' % (RESULT_DIR, company_name.decode('utf8'), len(extra_nei)), 'wb')
 		writer = csv.writer(csvfile)
 		writer.writerow(['运单号'])
 		writer.writerows([[o] for o in extra_nei])

@@ -1,24 +1,8 @@
 # coding=utf-8
-import csv
-import platform
-
-import sys
-import xlrd
 
 from DataParser.DataParserBase import DataParserBase
 
 __author__ = 'guangde'
-
-cur_platform = platform.system()
-proj_dir = sys.path[0]
-res_dir = '%s/res/' % proj_dir
-result_dir = '%s/result/' % proj_dir
-tmp_dir = '%s/tmp/' % proj_dir
-if cur_platform == 'Windows':
-	proj_dir = proj_dir.replace('/', '\\')
-	res_dir = res_dir.replace('/', '\\')
-	result_dir = result_dir.replace('/', '\\')
-	tmp_dir = tmp_dir.replace('/', '\\')
 
 
 class ShentongDataParser(DataParserBase):

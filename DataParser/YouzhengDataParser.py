@@ -1,8 +1,5 @@
 # coding=utf-8
 import csv
-import platform
-
-import sys
 
 import xlrd
 
@@ -10,16 +7,7 @@ from DataParser.DataParserBase import DataParserBase
 
 __author__ = 'guangde'
 
-cur_platform = platform.system()
-proj_dir = sys.path[0]
-res_dir = '%s/res/' % proj_dir
-result_dir = '%s/result/' % proj_dir
-tmp_dir = '%s/tmp/' % proj_dir
-if cur_platform == 'Windows':
-	proj_dir = proj_dir.replace('/', '\\')
-	res_dir = res_dir.replace('/', '\\')
-	result_dir = result_dir.replace('/', '\\')
-	tmp_dir = tmp_dir.replace('/', '\\')
+from setting import *
 
 
 class YouzhengDataParser(DataParserBase):
@@ -72,7 +60,7 @@ class YouzhengDataParser(DataParserBase):
 				count += 1
 			else:
 				all_dict.setdefault(order, {'province': province, 'price': price, 'weight': weight, 'cpname': cpname})
-		s = u'%s%s 重复运单号(%s).csv' % (result_dir, filename, count)
+		s = u'%s%s 重复运单号(%s).csv' % (RESULT_DIR, filename, count)
 		print u'%s 数据已经加载完毕,重复数：%s' % (filename, count)
 		csvfile = file(s, 'w+')
 		writer = csv.writer(csvfile)
@@ -110,7 +98,7 @@ class YouzhengDataParser(DataParserBase):
 				count += 1
 			else:
 				all_dict.setdefault(order, {'province': province, 'price': price, 'weight': weight, 'cpname': cpname})
-		s = u'%s%s 重复运单号(%s).csv' % (result_dir, filename, count)
+		s = u'%s%s 重复运单号(%s).csv' % (RESULT_DIR, filename, count)
 		print u'%s 数据已经加载完毕,重复数：%s' % (filename, count)
 		csvfile = file(s, 'w+')
 		writer = csv.writer(csvfile)
