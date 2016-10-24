@@ -40,4 +40,4 @@ def print_log(info):
 	for i in info:
 		str_len += get_width(ord(i))
 	left_len = 20
-	print '%s%s%s' % (('-' * left_len), info, ('-' * (60 - left_len - str_len)))
+	print u'%s%s%s' % ((u'-' * left_len), info, (u'-' * (60 - left_len - str_len)))
