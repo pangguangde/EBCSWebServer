@@ -10,12 +10,12 @@ class CompanyDataParser(DataParserBase):
 	def __init__(self, file_path):
 		DataParserBase.__init__(self, file_path)
 		self.info = {'order_key': '运单编号',
-		             'province_key': '目的地',
-		             'weight_key': '计费重量',
-		             'price_key': '总运费',
-		             'continue_key': '邮件综合查询',
-		             'left_break_key': '',
-		             'right_break_key': ''}
+					 'province_key': '目的地',
+					 'weight_key': '计费重量',
+					 'price_key': '总运费',
+					 'continue_key': '邮件综合查询',
+					 'left_break_key': '',
+					 'right_break_key': ''}
 		self.repeat_orders = []
 		self.repeat_count = 0
 
@@ -35,16 +35,18 @@ class CompanyDataParser(DataParserBase):
 			row_data = [s.decode('gbk') for s in row_data]
 			if not weight_col:
 				cpname_col = row_data.index(u'快递公司名称')
-				order_col = row_data.index(u'快递单号')
+				order_col = row_data.index(u'快递链接')
 				province_col = row_data.index(u'省')
 				weight_col = row_data.index(u'订单毛重')
 				continue
 			else:
 				price = 0
 				cpname = row_data[cpname_col]
-				order = row_data[order_col]
-				if isinstance(order, float):
-					order = unicode(int(order))
+				order = row_data[order_col].split(u'{')[0]
+				# if isinstance(order, float):
+				# 	order = unicode(int(order))
+				# elif type(order) in [unicode, str] and order.find('e'):
+				# 	order = unicode(int(float(order)))
 				province = row_data[province_col]
 				weight = row_data[weight_col]
 			if row_data[0] == u'0':
