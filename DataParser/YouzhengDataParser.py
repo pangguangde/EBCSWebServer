@@ -49,6 +49,8 @@ class YouzhengDataParser(DataParserBase):
 				continue
 			else:
 				order = column[order_col]
+				if isinstance(order, float):
+					order = unicode(int(order))
 				province = column[province_col]
 				weight = float(column[weight_col]) / 1000
 				price = column[price_col]

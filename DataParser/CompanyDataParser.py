@@ -43,6 +43,8 @@ class CompanyDataParser(DataParserBase):
 				price = 0
 				cpname = row_data[cpname_col]
 				order = row_data[order_col]
+				if isinstance(order, float):
+					order = unicode(int(order))
 				province = row_data[province_col]
 				weight = row_data[weight_col]
 			if row_data[0] == u'0':

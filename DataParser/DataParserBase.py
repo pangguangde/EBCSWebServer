@@ -60,6 +60,8 @@ class DataParserBase(object):
 		for i in range(1, 1000000):
 			row_data = sheet.row_values(i)
 			order = row_data[order_col]
+			if isinstance(order, float):
+				order = unicode(int(order))
 			province = row_data[province_col]
 			weight = row_data[weight_col]
 			price = row_data[price_col]
