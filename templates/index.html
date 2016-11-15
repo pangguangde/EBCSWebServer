@@ -3,7 +3,8 @@
 <script src="../static/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="../static/js/bootstrap-dropdown.js" type="text/javascript"></script>
 <script src="../static/js/bootstrap-scrollspy.js" type="text/javascript"></script>
-
+<link href="../static/bootstrap-fileinput-master/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+<script src="../static/bootstrap-fileinput-master/js/fileinput.js" type="text/javascript"></script>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,36 +20,53 @@
 <div id="myTabContent" class="tab-content">
   <div class="tab-pane fade active in" id="home">
     <div class="well" style="margin-left: 30px; margin-top: 30px; margin-right: 30px" align="center">
-        <form class="form-horizontal" action="/check/" method="post">
+        <form class="form-horizontal" action="/check/" method="post" enctype="multipart/form-data">
             <fieldset>
                 <div class="form-group">
-                    <label for="inputEmail" class="col-lg-2 control-label">外部中通</label>
+                    <label for="inputEmail" class="col-lg-2 control-label" style="color: #e95420">外部中通</label>
                     <div class="col-lg-10">
-                        {{ form.zhongtong_path(class="form-control", id="zhongtong_path", style="margin-top: 20") }}
+                        {{ form.zhongtong_file(id="zhongtong_file", class="file") }}
 {#                        <input type="text" class="form-control" id="zhongtong_path" style="margin-top: 20">#}
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail" class="col-lg-2 control-label">外部申通</label>
+                    <label for="inputEmail" class="col-lg-2 control-label" style="color: #e95420">外部申通</label>
                     <div class="col-lg-10">
-                        {{ form.shentong_path(class="form-control", id="shentong_path", style="margin-top: 20") }}
+                        {{ form.shentong_file(id="shentong_file", class="file") }}
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail" class="col-lg-2 control-label">外部邮政</label>
+                    <label for="inputEmail" class="col-lg-2 control-label" style="color: #e95420">外部邮政</label>
                     <div class="col-lg-10">
-                        {{ form.youzheng_path(class="form-control", id="youzheng_path", style="margin-top: 20") }}
+                        {{ form.youzheng_file(id="youzheng_file", class="file") }}
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail" class="col-lg-2 control-label">内部混合</label>
+                    <label for="inputEmail" class="col-lg-2 control-label" style="color: #e95420">内部混合</label>
                     <div class="col-lg-10">
-                        {{ form.company_path(class="form-control", id="company_path", style="margin-top: 20") }}
+                        {{ form.company_file(id="company_file", class="file") }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label" style="color: rgba(119, 119, 119, 0.76); font-size: 13px">内部混合1</label>
+                    <div class="col-lg-10">
+                        {{ form.company_file1(id="company_file1", class="file") }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label" style="color: rgba(119, 119, 119, 0.76); font-size: 13px">内部混合2</label>
+                    <div class="col-lg-10">
+                        {{ form.company_file2(id="company_file2", class="file") }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail" class="col-lg-2 control-label" style="color: rgba(119, 119, 119, 0.76); font-size: 13px">内部混合3</label>
+                    <div class="col-lg-10">
+                        {{ form.company_file3(id="company_file3", class="file") }}
                     </div>
                 </div>
                 <div class="form-group" >
                     <div class="col-lg-10 col-lg-offset-2">
-                        <button type="reset" class="btn btn-default">清空</button>
                         <button type="submit" class="btn btn-primary">提交</button>
                     </div>
                 </div>
@@ -210,99 +228,93 @@
   </div>
 </div>
 
-{##}
-{#<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">#}
-{#   <div class="modal-dialog">#}
-{#      <div class="modal-content">#}
-{#        <div class="modal-header">#}
-{#           <button type="button" class="close"#}
-{#              data-dismiss="modal" aria-hidden="true">#}
-{#                 &times;#}
-{#           </button>#}
-{#           <h4 class="modal-title" id="myModalLabel">#}
-{#              添加计价规则#}
-{#           </h4>#}
-{#        </div>#}
-{#        <div class="modal-body">#}
-{#        <form class="form-horizontal" action="/change_price_info/" method="post">#}
-{#          <fieldset>#}
-{#            <div class="form-group">#}
-{#              <label class="col-lg-2 control-label">快递公司</label>#}
-{#              <div class="col-lg-10">#}
-{#                <div class="radio" style="width: 30%;">#}
-{#                      {{ price_change_form.company }}#}
-{#                </div>#}
-{#              </div>#}
-{#            </div>#}
-{#            <div class="form-group">#}
-{#                <label for="inputEmail" class="col-lg-2 control-label">首重1</label>#}
-{#                <div class="col-lg-10">#}
-{#                    {{ price_change_form.weight_line1(class="form-control", id="inputDefault", style="width: 60%; float: left;", placeholder="[重量区间(KG)] 例: 1<x≤2 下同") }}#}
-{#                    {{ price_change_form.price_line1(class="form-control", id="inputDefault", style="width: 35%; float: right;", placeholder="价格(元)") }}#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="form-group">#}
-{#                <label for="inputEmail" class="col-lg-2 control-label">首重2</label>#}
-{#                <div class="col-lg-10">#}
-{#                    {{ price_change_form.weight_line2(class="form-control", id="inputDefault", style="width: 60%; float: left;") }}#}
-{#                    {{ price_change_form.price_line2(class="form-control", id="inputDefault", style="width: 35%; float: right;") }}#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="form-group">#}
-{#                <label for="inputEmail" class="col-lg-2 control-label">首重3</label>#}
-{#                <div class="col-lg-10">#}
-{#                    {{ price_change_form.weight_line3(class="form-control", id="inputDefault", style="width: 60%; float: left;") }}#}
-{#                    {{ price_change_form.price_line3(class="form-control", id="inputDefault", style="width: 35%; float: right;") }}#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="form-group">#}
-{#                <label for="inputEmail" class="col-lg-2 control-label">首重4</label>#}
-{#                <div class="col-lg-10">#}
-{#                    {{ price_change_form.weight_line4(class="form-control", id="inputDefault", style="width: 60%; float: left;") }}#}
-{#                    {{ price_change_form.price_line4(class="form-control", id="inputDefault", style="width: 35%; float: right;") }}#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="form-group">#}
-{#                <label for="inputEmail" class="col-lg-2 control-label">首重5</label>#}
-{#                <div class="col-lg-10">#}
-{#                    {{ price_change_form.weight_line5(class="form-control", id="inputDefault", style="width: 60%; float: left;") }}#}
-{#                    {{ price_change_form.price_line5(class="form-control", id="inputDefault", style="width: 35%; float: right;") }}#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="form-group">#}
-{#                <label for="inputEmail" class="col-lg-2 control-label">续重</label>#}
-{#                <div class="col-lg-10">#}
-{#                    {{ price_change_form.unit(class="form-control", id="inputDefault", style="width: 60%; float: left;", placeholder="[计量单位] 0代表kg,1代表100g") }}#}
-{#                    {{ price_change_form.extra_price(class="form-control", id="inputDefault", style="width: 35%; float: right;", placeholder="价格(元)") }}#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="form-group">#}
-{#              <label for="textArea" class="col-lg-2 control-label">生效省份</label>#}
-{#              <div class="col-lg-10">#}
-{#                  {{ price_change_form.province(class="form-control", rows="3", id="textArea", placeholder="[当前计价的适用省份，用加号分隔，中间没有空格]&#10例: 北京+天津+上海") }}#}
-{#              </div>#}
-{#            </div>#}
-{#            <div class="form-group">#}
-{#              <div class="col-lg-10 col-lg-offset-2">#}
-{#                <button type="reset" class="btn btn-default">重置</button>#}
-{#                <button type="submit" class="btn btn-primary">提交更改</button>#}
-{#              </div>#}
-{#            </div>#}
-{#          </fieldset>#}
-{#        </form>#}
-{#         </div>#}
-{#         <div class="modal-footer">#}
-{#            <button type="button" class="btn btn-default"#}
-{#               data-dismiss="modal">关闭#}
-{#            </button>#}
-{#         </div>#}
-{#      </div>#}
-{#</div>#}
-{#</div>#}
 </body>
 
 </html>
 
 <script type="text/javascript">
-    $('#identifier').modal(options)
+    $("#zhongtong_file").fileinput({
+        uploadUrl: '#', // you must set a valid URL here else you will get an error
+        allowedFileExtensions : ['csv', 'xls', 'xlsx'],
+        overwriteInitial: false,
+        maxFilesNum: 1,
+        showUpload: false,
+        showPreview: false,
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function(filename) {
+            return filename.replace('(', '_').replace(']', '_');
+        }
+	});
+    $("#shentong_file").fileinput({
+        uploadUrl: '#', // you must set a valid URL here else you will get an error
+        allowedFileExtensions : ['csv', 'xls', 'xlsx'],
+        overwriteInitial: false,
+        maxFilesNum: 1,
+        showUpload: false,
+        showPreview: false,
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function(filename) {
+            return filename.replace('(', '_').replace(']', '_');
+        }
+	});
+    $("#youzheng_file").fileinput({
+        uploadUrl: '#', // you must set a valid URL here else you will get an error
+        allowedFileExtensions : ['csv', 'xls', 'xlsx'],
+        overwriteInitial: false,
+        maxFilesNum: 1,
+        showUpload: false,
+        showPreview: false,
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function(filename) {
+            return filename.replace('(', '_').replace(']', '_');
+        }
+	});
+    $("#company_file").fileinput({
+        uploadUrl: '#', // you must set a valid URL here else you will get an error
+        allowedFileExtensions : ['csv', 'xls', 'xlsx'],
+        overwriteInitial: false,
+        maxFilesNum: 3,
+        showUpload: false,
+        showPreview: false,
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function(filename) {
+            return filename.replace('(', '_').replace(']', '_');
+        }
+	});
+    $("#company_file1").fileinput({
+        uploadUrl: '#', // you must set a valid URL here else you will get an error
+        allowedFileExtensions : ['csv', 'xls', 'xlsx'],
+        overwriteInitial: false,
+        maxFilesNum: 3,
+        showUpload: false,
+        showPreview: false,
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function(filename) {
+            return filename.replace('(', '_').replace(']', '_');
+        }
+	});
+    $("#company_file2").fileinput({
+        uploadUrl: '#', // you must set a valid URL here else you will get an error
+        allowedFileExtensions : ['csv', 'xls', 'xlsx'],
+        overwriteInitial: false,
+        maxFilesNum: 3,
+        showUpload: false,
+        showPreview: false,
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function(filename) {
+            return filename.replace('(', '_').replace(']', '_');
+        }
+	});
+    $("#company_file3").fileinput({
+        uploadUrl: '#', // you must set a valid URL here else you will get an error
+        allowedFileExtensions : ['csv', 'xls', 'xlsx'],
+        overwriteInitial: false,
+        maxFilesNum: 3,
+        showUpload: false,
+        showPreview: false,
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function(filename) {
+            return filename.replace('(', '_').replace(']', '_');
+        }
+	});
 </script>
